@@ -2,27 +2,21 @@
 (server-mode)
 (load-theme 'doom-one-light t)
 (setq inhibit-splash-screen t)
-;; (custom-set-faces
-;;  '(bold ((t (:foreground "#CD5C5C" :slant normal :weight bold :width normal :foundry "outline" :family "Source code pro"))))
-;;  '(bold-italic ((t (:inherit (bold italic) :foreground "dim gray" :slant italic :weight bold :height 135 :width normal :foundry "outline" :family "Noto Sans Mono CJK SC"))))
-;;  '(italic ((t (:foreground "slate gray" :slant italic :weight normal :height 140 :width expanded :foundry "outline" :family "MindBlue Bold Italic"))))
-;;  '(org-level-1 ((t ( :height 1.5))))
-;;  '(org-level-2 ((t (:inherit outline-2 :height 1.3))))
-;;  '(org-level-3 ((t (:inherit outline-3 :height 1.2))))
-;;  '(org-level-4 ((t (:inherit outline-4 :height 1.0))))
-;;  '(org-level-5 ((t (:inherit outline-5 :height 1.0))))
-;;  '(org-headline-done ((t (:height 0.8 :Strike-through t))))
-;; )
+(global-auto-revert-mode t)
+
 (setq
- doom-font (font-spec :family "SF Mono" :size 20)
- doom-big-font (font-spec :family "SF Mono" :size 36)
- doom-variable-pitch-font (font-spec :family "Avenir Next" :size 18)
+ doom-font (font-spec :family "SF Mono" :size 14)
+ doom-big-font (font-spec :family "SF Mono" :size 20)
+ doom-variable-pitch-font (font-spec :family "Avenir Next" :size 17)
+ ;----------------------------------------------------- org-mode
+ yas-indent-line 'nil
+ yas-also-auto-indent-first-line 'nil
+ org-agenda-skip-scheduled-if-done t
+ org-log-done 'time
+ ;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 )
 
-
-(global-auto-revert-mode t)
 (add-hook 'org-mode-hook #'auto-fill-mode)
-;; (add-hook 'org-mode-hook (lambda () (linum-mode 0)))
 (add-hook! 'org-mode-hook (company-mode -1))
 (add-hook! 'org-capture-mode-hook (company-mode -1))
 
