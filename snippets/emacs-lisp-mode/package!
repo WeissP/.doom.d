@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: package!
+# uuid:
+# key: pack
+# condition: t
+# --
+(package! $0)
