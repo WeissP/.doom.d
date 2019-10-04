@@ -3,23 +3,44 @@
 (load-theme 'doom-one-light t)
 (setq inhibit-splash-screen t)
 (global-auto-revert-mode t)
+(global-visual-line-mode t) ;truncate  lines
+
 
 (setq
- doom-font (font-spec :family "SF Mono" :size 14)
+ ; ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ face
+ doom-font (font-spec :family "SF Mono" :size 15)
  doom-big-font (font-spec :family "SF Mono" :size 20)
  doom-variable-pitch-font (font-spec :family "Avenir Next" :size 17)
- ;----------------------------------------------------- org-mode
+; ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑
+ auto-save-default 'nil
+ ; ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ org-mode
  yas-indent-line 'nil
  yas-also-auto-indent-first-line 'nil
  org-agenda-skip-scheduled-if-done t
  org-log-done 'time
- ;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+; ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑
 )
+
+(def-package! super-save
+  :init
+  ;; :ensure t
+  :config
+  (super-save-mode +1)
+  )
+
+(def-package! org-fancy-priorities
+   :after org
+   :hook (org-mode . org-fancy-priorities-mode)
+   :config
+   (setq org-fancy-priorities-list '("⚡⚡" "⚡" "❄"))
+   )
+
+
 
 (add-hook 'org-mode-hook #'auto-fill-mode)
 (add-hook! 'org-mode-hook (company-mode -1))
 (add-hook! 'org-capture-mode-hook (company-mode -1))
-
+(add-hook 'org-mode-hook 'toggle-truncate-lines)
 
 (after! org
   (set-face-attribute 'bold nil
@@ -39,6 +60,14 @@
                       :underline 'nil
                       :foreground "#20B2AA"
                       :background nil)
+  (set-face-attribute 'org-block-begin-line nil
+                      :weight 'normal
+                      :slant 'italic
+                      :underline 'nil
+                      :foreground "#c0c0c0"
+                      :background nil)
+  (set-face-attribute 'org-block nil
+                      :background "#fafafa")
   (set-face-attribute 'org-headline-done nil
                       :strike-through t
                       :weight 'normal)
@@ -70,7 +99,10 @@
                       :height 1.0
                       :foreground "#040404"
                       :weight 'normal)
-
+  (set-face-attribute 'org-level-8 nil
+                      :height 1.0
+                      :foreground "#040404"
+                      :weight 'normal)
   ;; (setq line-spacing 1.5)
 
   (map! :map org-mode-map
@@ -87,15 +119,10 @@
    org-agenda-files (list org-directory)
    ;; org-agenda-files (ignore-errors (directory-files +org-dir t "\\.org$" t))
    org-todo-keywords '((sequence "TODO(t)" "INPROGRESS(i)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c@)"))
+   org-cycle-max-level 15
    )
 
-  (use-package! org-fancy-priorities
-    :hook (org-mode . org-fancy-priorities-mode)
-    :config
-    (setq org-fancy-priorities-list '("⚡⚡" "⚡" "❄"))
-    )
-
-  (setq org-fontify-done-headline t)
+ (setq org-fontify-done-headline t)
   (setq org-agenda-compact-blocks t)
   (map! :desc "Create Sparse Tree for Tags" :ne "SPC r t" #'org-tags-sparse-tree)
   (map! :desc "switch-and-bookmarks-suchen" :ne "SPC r r" #'switch-and-bookmarks-suchen())
@@ -110,13 +137,21 @@
   (map! :desc "switch-to-Einsammlung" :ne "C-M-p E" #'switch-to-Einsammlung())
   ;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   ;----------------------------------------------------- turn off line numbers in Org-mode
-  (defun nolinum ()
+  (defun weiss-org-option ()
      (interactive)
-     (setq display-line-numbers 'nil)
+     (setq
+      display-line-numbers 'nil
+      )
      )
-   (add-hook 'org-mode-hook 'nolinum)
-   )
+   (add-hook 'org-mode-hook 'weiss-org-option)
   ;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  (map! :desc "switch-to-Einsammlung" :ne "SPC a" #'weiss-eval-last-sexp())
+  (defun weiss-eval-last-sexp()
+    (interactive)
+    (end-of-line)
+    (eval-last-sexp())
+    )
+   ) ; after org done
 
 (find-file "/home/weiss/Dokumente/Org/Kenntnisse.org")
 (find-file "/home/weiss/Dokumente/Org/todo.org")

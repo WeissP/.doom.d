@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: elisp-code
+# uuid:
+# key: <el
+# condition: t
+# --
+#+BEGIN_SRC elisp
+$0
+#+END_SRC

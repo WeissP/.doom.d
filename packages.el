@@ -8,3 +8,5 @@
 
 (package! org-fancy-priorities)
 (package! pinyin-search)
+;; (package! org-protocol)
+(package! super-save)
