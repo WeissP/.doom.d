@@ -4,6 +4,7 @@
 (setq inhibit-splash-screen t)
 (global-auto-revert-mode t)
 (global-visual-line-mode t) ;truncate  lines
+(+global-word-wrap-mode t) ;truncate  lines
 
 
 (setq
@@ -120,14 +121,24 @@
    ;; org-agenda-files (ignore-errors (directory-files +org-dir t "\\.org$" t))
    org-todo-keywords '((sequence "TODO(t)" "INPROGRESS(i)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c@)"))
    org-cycle-max-level 15
+   org-fontify-done-headline t
+   org-agenda-compact-blocks t
    )
 
- (setq org-fontify-done-headline t)
-  (setq org-agenda-compact-blocks t)
-  (map! :desc "Create Sparse Tree for Tags" :ne "SPC r t" #'org-tags-sparse-tree)
-  (map! :desc "switch-and-bookmarks-suchen" :ne "SPC r r" #'switch-and-bookmarks-suchen())
-  (map! :desc "pinyin-search" :ne "SPC r s" #'pinyin-search)
-  ;----------------------------------------------------- switch and Bookmarks suchen
+  (map! :desc "Create Sparse Tree for Tags"
+        :leader
+        :n "rt" #'org-tags-sparse-tree)
+  (map! :desc "switch-and-bookmarks-suchen"
+        :leader
+        :n "rr" #'switch-and-bookmarks-suchen())
+  (map! :desc "pinyin-search"
+        :leader
+        :n "rs" #'pinyin-search)
+  (map! :desc "create-table"
+        :leader
+        :nv "rjt" #'org-table-create-or-convert-from-region)
+
+ ;----------------------------------------------------- switch and Bookmarks suchen
  (setq org-agenda-custom-commands '(("b" occur-tree ":Bookmarks:")))
   (fset 'switch-and-bookmarks-suchen
         (kbd "C-M-p E SPC o a a b"))
@@ -145,13 +156,18 @@
      )
    (add-hook 'org-mode-hook 'weiss-org-option)
   ;^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  (map! :desc "switch-to-Einsammlung" :ne "SPC a" #'weiss-eval-last-sexp())
+  (map! :desc "switch-to-Einsammlung"
+        :leader
+        :ne "a" #'weiss-eval-last-sexp())
   (defun weiss-eval-last-sexp()
     (interactive)
     (end-of-line)
     (eval-last-sexp())
     )
+
+
    ) ; after org done
+
 
 (find-file "/home/weiss/Dokumente/Org/Kenntnisse.org")
 (find-file "/home/weiss/Dokumente/Org/todo.org")
