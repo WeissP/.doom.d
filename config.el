@@ -4,6 +4,10 @@
 (global-visual-line-mode t) ;truncate  lines
 (+global-word-wrap-mode t) ;truncate  lines
 
+(rainbow-mode +1)
+(global-aggressive-indent-mode 1)
+;; (add-to-list 'aggressive-indent-excluded-modes 'html-mode)
+
 (setq
  ;; ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ face
  doom-font (font-spec :family "SF Mono" :size 15)
@@ -17,7 +21,11 @@
  org-agenda-skip-scheduled-if-done t
  org-log-done 'time)
 ;; ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑
-
+(defun weiss-global-option()
+  (interactive)
+  (rainbow-turn-on)
+  )
+(add-hook 'find-file-hook 'weiss-global-option)
 
 (def-package! super-save
   :init
@@ -25,15 +33,32 @@
   (super-save-mode +1))
 
 
+(defun weiss-toggle-up-lower-case()
+  (interactive)
+  (let ((c  (buffer-substring-no-properties (point) (+ (point) 1)))
+        (upcaseC (upcase (buffer-substring-no-properties (point) (+ (point) 1))))
+        ) ;; let c be current character
+    (if (equal c upcaseC)
+        (evil-downcase (point) (+ (point) 1))
+      (evil-upcase (point) (+ (point) 1))
+      )
+    )
+  )
+;; test
+
+;; (def-package! rainbow-mode
+;;   :init
+;;   :config
+;;   )
 ;; (def-package! highlight-indent-guides
 ;; :config
 ;; (setq highlight-indent-guides-auto-enabled nil)
 ;; (setq highlight-indent-guides-method 'character)
 ;; (setq highlight-indent-guides-character ?\|)
 ;; ;; :custom-face
-;; (set-face-background 'highlight-indent-guides-even-face "#040404")
-;; (set-face-foreground 'highlight-indent-guides-odd-face "#dee6ed")
-;; (set-face-foreground 'highlight-indent-guides-character-face "red")
+;; (set-face-background 'highlight-indent-guides-even-face "")
+;; (set-face-foreground 'highlight-indent-guides-odd-face "")
+;; (set-face-foreground 'highlight-indent-guides-character-face "")
 ;; )
 
 (def-package! rotate-text
@@ -44,7 +69,12 @@
                             ("Background" "Foreground")
                             ("background" "foreground")
                             ("beginning" "end")
+                            ("forward" "backward")
                             ("even" "odd"))))
+
+
+
+
 
 (def-package! org-fancy-priorities
   :after org
@@ -52,10 +82,49 @@
   :config
   (setq org-fancy-priorities-list '("⚡⚡" "⚡" "❄")))
 
+(map! :desc "toggle-up-lower-case"
+      :leader
+      :n "eu" #'weiss-toggle-up-lower-case)
 
 (map! :desc "format whole buffer wenn nothing selected"
       :leader
       :n "ri" #'weiss-indent)
+
+(map! :desc "move point to the start of the string"
+      :nei "M-n" #'sp-beginning-of-sexp)
+
+;; Fn9
+(map! :desc "move point to the end of the string"
+      :nei "M-m" #'sp-end-of-sexp)
+
+;; Fn18
+(map! :desc "include new var (right side)"
+      :leader
+      :n "el" #'sp-forward-slurp-sexp)
+
+(map! :desc "exclude new var (right side)"
+      :leader
+      :n "eh" #'sp-forward-barf-sexp)
+
+(map! :desc "include new var(left side)"
+      :leader
+      :n "eH" #'sp-backward-slurp-sexp)
+
+(map! :desc "exclude new var(left side)"
+      :leader
+      :n "eL" #'sp-backward-barf-sexp)
+
+(map! :desc "trade places"
+      :leader
+      :n "et" #'sp-transpose-sexp)
+
+(map! :desc "delete expression"
+      :leader
+      :n "ek" #'sp-kill-sexp)
+
+(map! :desc "delete backward all expression"
+      :leader
+      :n "eK" #'sp-kill-hybrid-sexp)
 
 (add-hook 'org-mode-hook #'auto-fill-mode)
 (add-hook! 'org-mode-hook (company-mode -1))
@@ -163,6 +232,7 @@
   (defun switch-to-Einsammlung()
     (interactive)
     (switch-to-buffer "Einsammlung.org"))
+    ;; (find-file "~/Dokumente/Org/Einsammlung.org")
   (map! :desc "switch-to-Einsammlung" :ne "C-M-p E" #'switch-to-Einsammlung())
   ;; ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑
   ;; ---------------------------------------------------------------------------
@@ -170,8 +240,6 @@
     (interactive)
     (setq
      display-line-numbers 'nil))
-
-
 
 
   (add-hook 'org-mode-hook 'weiss-org-option)
@@ -195,3 +263,5 @@
 
 
 (setq display-line-numbers-type 'relative)
+
+;; (let [x "foo bar baz ... blah" abs] )

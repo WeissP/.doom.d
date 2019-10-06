@@ -1,7 +1,7 @@
 # -*- mode: snippet -*-
-# name: don't use
+# name: weissblockcomment
 # uuid:
-# key: dontusebcom
+# key: bcom
 # condition: t
 # --
 test

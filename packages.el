@@ -10,3 +10,5 @@
 (package! pinyin-search)
 ;; (package! org-protocol)
 (package! super-save)
+(package! aggressive-indent)
+(package! rainbow-mode)
