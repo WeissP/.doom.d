@@ -33,18 +33,45 @@
   (super-save-mode +1))
 
 
-(defun weiss-toggle-up-lower-case()
+;; (defun weiss-toggle-up-lower-case()
+;;   (interactive)
+;;   (let ((c  (buffer-substring-no-properties (point) (+ (point) 1)))
+;;         (upcaseC (upcase (buffer-substring-no-properties (point) (+ (point) 1))))
+;;         ) ;; let c be current character
+;;     (if (equal c upcaseC)
+;;         (evil-downcase (point) (+ (point) 1))
+;;       (evil-upcase (point) (+ (point) 1))
+;;       )
+;;     )
+;;   )
+
+;; ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ toggle up/lower-case
+(defun weiss-toggle-up-lower-case-of-single-character(charPoint)
   (interactive)
-  (let ((c  (buffer-substring-no-properties (point) (+ (point) 1)))
-        (upcaseC (upcase (buffer-substring-no-properties (point) (+ (point) 1))))
-        ) ;; let c be current character
-    (if (equal c upcaseC)
-        (evil-downcase (point) (+ (point) 1))
-      (evil-upcase (point) (+ (point) 1))
+  (let ((char (buffer-substring-no-properties charPoint (+ charPoint 1)))
+        (upcaseChar (upcase (buffer-substring-no-properties charPoint (+ charPoint 1)))))
+    (if (equal char upcaseChar)
+        (evil-downcase charPoint (+ charPoint 1))
+      (evil-upcase charPoint (+ charPoint 1))
       )
+    ;; (goto-char charPoint)
     )
   )
-;; test
+
+(defun weiss-toggle-up-lower-case()
+  (interactive)
+  (if (use-region-p)
+      (let ((count 0))
+        (while (< count (- (region-end) (region-beginning)))
+          (weiss-toggle-up-lower-case-of-single-character(+ (region-beginning) count))
+          (setq count (+ count 1))
+          )
+        )
+    (weiss-toggle-up-lower-case-of-single-character (point))
+    )
+  )
+;; ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑
+;; ---------------------------------------------------------------------------
 
 ;; (def-package! rainbow-mode
 ;;   :init
@@ -83,8 +110,13 @@
   (setq org-fancy-priorities-list '("⚡⚡" "⚡" "❄")))
 
 (map! :desc "toggle-up-lower-case"
+      ;; :leader
+      :n "gu" #'weiss-toggle-up-lower-case)
+
+(map! :desc "test"
       :leader
-      :n "eu" #'weiss-toggle-up-lower-case)
+      :n "rn" #'test)
+
 
 (map! :desc "format whole buffer wenn nothing selected"
       :leader
@@ -225,34 +257,29 @@
   (map! :desc "create-table"
         :leader
         :nv "rjt" #'org-table-create-or-convert-from-region)
-  ;; ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ switch and Bookmarks suchen
-  (setq org-agenda-custom-commands '(("b" occur-tree ":Bookmarks:")))
-  (fset 'switch-and-bookmarks-suchen
-        (kbd "C-M-p E SPC o a a b"))
-  (defun switch-to-Einsammlung()
-    (interactive)
-    (switch-to-buffer "Einsammlung.org"))
-    ;; (find-file "~/Dokumente/Org/Einsammlung.org")
-  (map! :desc "switch-to-Einsammlung" :ne "C-M-p E" #'switch-to-Einsammlung())
-  ;; ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑
-  ;; ---------------------------------------------------------------------------
   (defun weiss-org-option ()
     (interactive)
+    (iimage-mode)
     (setq
      display-line-numbers 'nil))
 
 
   (add-hook 'org-mode-hook 'weiss-org-option)
 
-  (map! :desc "go to end of line and eval"
-        :leader
-        :ne "a" #'weiss-eval-last-sexp())
-  (defun weiss-eval-last-sexp()
-    (interactive)
-    (end-of-line)
-    (eval-last-sexp())))
-
+  )
 ;; after org done
+
+;; ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ quick eval
+(map! :desc "go to end of line and eval"
+      :leader
+      :ne "a" #'weiss-eval-last-sexp())
+(defun weiss-eval-last-sexp()
+  (interactive)
+  (end-of-line)
+  (eval-last-sexp()))
+;; ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑
+;; ---------------------------------------------------------------------------
+
 
 (defun weiss-indent()
   (interactive)
@@ -264,4 +291,20 @@
 
 (setq display-line-numbers-type 'relative)
 
-;; (let [x "foo bar baz ... blah" abs] )
+;; ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ switch and Bookmarks suchen
+(setq org-agenda-custom-commands
+      '(
+        ("b" occur-tree "Bookmarks")
+        )
+      )
+(defun weiss-switch-and-Bookmarks-search()
+  (interactive)
+  (find-file "~/Dokumente/Org/Einsammlung.org")
+  (org-agenda nil "b")
+  )
+(map! :desc "switch and Bookmarks search"
+      :leader
+      :nv "rr" #'weiss-switch-and-Bookmarks-search)
+;; ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑
+;; ---------------------------------------------------------------------------
+(setq org-image-actual-width 300)

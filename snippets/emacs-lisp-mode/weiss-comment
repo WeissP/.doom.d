@@ -1,7 +1,0 @@
-# -*- mode: snippet -*-
-# name: don't use
-# uuid:
-# key: dontusebcom
-# condition: t
-# --
-test
