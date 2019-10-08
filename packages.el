@@ -12,3 +12,5 @@
 (package! super-save)
 (package! aggressive-indent)
 (package! rainbow-mode)
+(package! expand-region)
+(package! emojify)

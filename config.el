@@ -4,6 +4,8 @@
 (global-visual-line-mode t) ;truncate  lines
 (+global-word-wrap-mode t) ;truncate  lines
 
+(add-hook 'after-init-hook #'global-emojify-mode) ;; show emoji as picture
+
 (rainbow-mode +1)
 (global-aggressive-indent-mode 1)
 ;; (add-to-list 'aggressive-indent-excluded-modes 'html-mode)
@@ -32,18 +34,6 @@
   :config
   (super-save-mode +1))
 
-
-;; (defun weiss-toggle-up-lower-case()
-;;   (interactive)
-;;   (let ((c  (buffer-substring-no-properties (point) (+ (point) 1)))
-;;         (upcaseC (upcase (buffer-substring-no-properties (point) (+ (point) 1))))
-;;         ) ;; let c be current character
-;;     (if (equal c upcaseC)
-;;         (evil-downcase (point) (+ (point) 1))
-;;       (evil-upcase (point) (+ (point) 1))
-;;       )
-;;     )
-;;   )
 
 ;; ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ toggle up/lower-case
 (defun weiss-toggle-up-lower-case-of-single-character(charPoint)
@@ -87,6 +77,20 @@
 ;; (set-face-foreground 'highlight-indent-guides-odd-face "")
 ;; (set-face-foreground 'highlight-indent-guides-character-face "")
 ;; )
+(defun my-highlighter (level responsive display)
+  ;; (if (or (< level 2)(= 0 (mod level 2)))
+  (if (= 0 (mod level 2))
+      nil
+    (highlight-indent-guides--highlighter-default level responsive display)))
+
+
+(def-package! highlight-indent-guides
+  :config
+  (setq highlight-indent-guides-method 'character)
+  (setq highlight-indent-guides-character ?\>)
+  (setq highlight-indent-guides-highlighter-function 'my-highlighter))
+
+
 
 (def-package! rotate-text
   :config
@@ -97,6 +101,7 @@
                             ("background" "foreground")
                             ("beginning" "end")
                             ("forward" "backward")
+                            ("expand" "contract")
                             ("even" "odd"))))
 
 
@@ -109,6 +114,11 @@
   :config
   (setq org-fancy-priorities-list '("⚡⚡" "⚡" "❄")))
 
+(map! :desc "expand region"
+      :nvi "M-[" #'er/expand-region)
+(map! :desc "expand region"
+      :nvi "M-]" #'er/contract-region)
+
 (map! :desc "toggle-up-lower-case"
       ;; :leader
       :n "gu" #'weiss-toggle-up-lower-case)
@@ -116,7 +126,6 @@
 (map! :desc "test"
       :leader
       :n "rn" #'test)
-
 
 (map! :desc "format whole buffer wenn nothing selected"
       :leader
@@ -248,9 +257,6 @@
   (map! :desc "Create Sparse Tree for Tags"
         :leader
         :n "rt" #'org-tags-sparse-tree)
-  (map! :desc "switch-and-bookmarks-suchen"
-        :leader
-        :n "rr" #'switch-and-bookmarks-suchen())
   (map! :desc "pinyin-search"
         :leader
         :n "rs" #'pinyin-search)
