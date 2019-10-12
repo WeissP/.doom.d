@@ -14,3 +14,5 @@
 (package! rainbow-mode)
 (package! expand-region)
 (package! emojify)
+(package! org-pdftools :disable t)
+(package! org-noter)

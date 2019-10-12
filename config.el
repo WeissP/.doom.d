@@ -9,19 +9,8 @@
 (rainbow-mode +1)
 (global-aggressive-indent-mode 1)
 ;; (add-to-list 'aggressive-indent-excluded-modes 'html-mode)
+;; (setq org-bullets-bullet-list '("+" "-" "→" "▶" "●" "○" "·" ))
 
-(setq
- ;; ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ face
- doom-font (font-spec :family "SF Mono" :size 15)
- doom-big-font (font-spec :family "SF Mono" :size 20)
- doom-variable-pitch-font (font-spec :family "Avenir Next" :size 17)
- ;; ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑
- auto-save-default 'nil
- ;; ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ org-mode
- yas-indent-line 'nil
- yas-also-auto-indent-first-line 'nil
- org-agenda-skip-scheduled-if-done t
- org-log-done 'time)
 ;; ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑
 (defun weiss-global-option()
   (interactive)
@@ -34,6 +23,10 @@
   :config
   (super-save-mode +1))
 
+;; (def-package! org-pdftools
+;;   :config
+;;   (setq org-pdftools-root-dir /home/weiss/Dokumente/Vorlesungen/)
+;;   )
 
 ;; ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ toggle up/lower-case
 (defun weiss-toggle-up-lower-case-of-single-character(charPoint)
@@ -63,23 +56,10 @@
 ;; ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑
 ;; ---------------------------------------------------------------------------
 
-;; (def-package! rainbow-mode
-;;   :init
-;;   :config
-;;   )
-;; (def-package! highlight-indent-guides
-;; :config
-;; (setq highlight-indent-guides-auto-enabled nil)
-;; (setq highlight-indent-guides-method 'character)
-;; (setq highlight-indent-guides-character ?\|)
-;; ;; :custom-face
-;; (set-face-background 'highlight-indent-guides-even-face "")
-;; (set-face-foreground 'highlight-indent-guides-odd-face "")
-;; (set-face-foreground 'highlight-indent-guides-character-face "")
-;; )
 (defun my-highlighter (level responsive display)
   ;; (if (or (< level 2)(= 0 (mod level 2)))
-  (if (= 0 (mod level 2))
+  ;; (if (= 0 (mod level 2))
+  (if (or (< level 1))
       nil
     (highlight-indent-guides--highlighter-default level responsive display)))
 
@@ -104,15 +84,51 @@
                             ("expand" "contract")
                             ("even" "odd"))))
 
-
-
-
-
 (def-package! org-fancy-priorities
   :after org
   :hook (org-mode . org-fancy-priorities-mode)
   :config
   (setq org-fancy-priorities-list '("⚡⚡" "⚡" "❄")))
+
+
+(defun weiss-counsel-grep-or-swiper()
+  (interactive)
+  (if (use-region-p)
+      (let ((regionString (buffer-substring-no-properties (region-beginning) (region-end))))
+        (evil-exit-visual-state)
+        (counsel-grep-or-swiper regionString)
+        )
+    (counsel-grep-or-swiper)
+    )
+  )
+
+;; TAG global-settings
+(setq
+ ;; ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ face
+ doom-font (font-spec :family "SF Mono" :size 15)
+ doom-big-font (font-spec :family "SF Mono" :size 20)
+ doom-variable-pitch-font (font-spec :family "Avenir Next" :size 17)
+ ;; ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑
+ org-noter-insert-note-no-questions 't
+ org-noter-auto-save-last-location 't
+ auto-save-default 'nil
+ company-idle-delay 0.1
+ +ivy-task-tags '(("TODO" . warning)
+                  ("FIXME" . error)
+                  ("TAG" . tag)
+                  )
+ )
+(map! :desc "go to end of line and eval"
+      :leader
+      :ne "a" #'weiss-eval-last-sexp())
+
+(map! :desc "tag search"
+      :leader
+      :nv "<RET>" #'+default/project-tasks)
+
+(map! :desc "swip search"
+      :n "C-s" #'weiss-counsel-grep-or-swiper)
+;; original command: (isearch-forward &optional REGEXP-P NO-RECURSIVE-EDIT)
 
 (map! :desc "expand region"
       :nvi "M-[" #'er/expand-region)
@@ -122,10 +138,6 @@
 (map! :desc "toggle-up-lower-case"
       ;; :leader
       :n "gu" #'weiss-toggle-up-lower-case)
-
-(map! :desc "test"
-      :leader
-      :n "rn" #'test)
 
 (map! :desc "format whole buffer wenn nothing selected"
       :leader
@@ -166,6 +178,53 @@
 (map! :desc "delete backward all expression"
       :leader
       :n "eK" #'sp-kill-hybrid-sexp)
+
+(map! :desc "direct annot with yellow color"
+      :map pdf-view-mode-map
+      :leader
+      :nv "dh" #'pdf-annot-add-highlight-markup-annotation
+      )
+
+(map! :desc "direct annot and insert note with selected text"
+      :map pdf-view-mode-map
+      :leader
+      :nv "ds" #'weiss-direct-annot-and-insert-note
+      )
+
+(map! :desc "direct insert note with selected text"
+      :map pdf-view-mode-map
+      :leader
+      :nv "s" #'weiss-direct-insert-note
+      )
+
+(map! :desc "sync note location"
+      :map pdf-view-mode-map
+      :leader
+      :nv "dc" #'org-noter-sync-current-note
+      )
+
+
+(defun weiss-direct-annot-and-insert-note()
+  (interactive)
+  (let ((pdfBuffer (buffer-name))
+        (markedText (org-noter--get-precise-info))
+        (list (pdf-view-active-region))
+        )
+    (pdf-annot-add-markup-annotation list 'highlight)
+    (org-noter-insert-precise-note)
+    (evil-exit-visual-state nil pdfBuffer) ;; conflict between evil and pdf text selection
+    )
+  )
+(defun weiss-direct-insert-note()
+  (interactive)
+  (let ((pdfBuffer (buffer-name))
+        (markedText (org-noter--get-precise-info))
+        )
+    (org-noter-insert-precise-note)
+    (evil-exit-visual-state nil pdfBuffer) ;; conflict between evil and pdf text selection
+    )
+  )
+
 
 (add-hook 'org-mode-hook #'auto-fill-mode)
 (add-hook! 'org-mode-hook (company-mode -1))
@@ -235,37 +294,59 @@
                       :weight 'normal)
   ;; (setq line-spacing 1.5)
 
-  (map! :map org-mode-map
-        :n "M-j" #'org-metadown
-        :n "M-k" #'org-metaup)
-
+  ;; TAG org-settings
   (setq
+   ;; yas-indent-line 'nil
+   ;; yas-also-auto-indent-first-line 'nil
+   org-agenda-skip-scheduled-if-done t
+   org-log-done 'time
    org-priority-faces '((65 :foreground "#de3d2f" :weight bold)
                         (66 :foreground "#da8548")
                         (67 :foreground "#0098dd"))
 
    org-directory "~/Dokumente/Org/"
    ;; org-agenda-files "~/Dokumente/Org/*.org"
+   org-image-actual-width 300
    org-agenda-files (list org-directory)
    ;; org-agenda-files (ignore-errors (directory-files +org-dir t "\\.org$" t))
-   org-todo-keywords '((sequence "TODO(t)" "INPROGRESS(i)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c@)"))
+   org-todo-keywords '((sequence "INPROGRESS(i)" "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c@)"))
    org-cycle-max-level 15
    org-fontify-done-headline t
-   org-agenda-compact-blocks t)
+   org-agenda-compact-blocks t
+   )
 
+  (map! :map org-mode-map
+        :n "M-j" #'org-metadown
+        :n "M-k" #'org-metaup)
+
+  (map! :desc "org sort"
+        :leader
+        :n "rs" #'org-sort-entries)
 
   (map! :desc "Create Sparse Tree for Tags"
         :leader
         :n "rt" #'org-tags-sparse-tree)
   (map! :desc "pinyin-search"
         :leader
-        :n "rs" #'pinyin-search)
+        :n "rp" #'pinyin-search)
   (map! :desc "create-table"
         :leader
         :nv "rjt" #'org-table-create-or-convert-from-region)
+
+  (map! :desc "hide properties"
+        :leader
+        :n "rh" #'weiss-hide-drawers
+        )
+
+  (defun weiss-hide-drawers()
+    (interactive)
+    (org-cycle-hide-drawers 'all)
+    )
+
   (defun weiss-org-option ()
     (interactive)
     (iimage-mode)
+    (org-cycle-hide-drawers 'all)
     (setq
      display-line-numbers 'nil))
 
@@ -276,9 +357,6 @@
 ;; after org done
 
 ;; ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ quick eval
-(map! :desc "go to end of line and eval"
-      :leader
-      :ne "a" #'weiss-eval-last-sexp())
 (defun weiss-eval-last-sexp()
   (interactive)
   (end-of-line)
@@ -286,6 +364,15 @@
 ;; ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑
 ;; ---------------------------------------------------------------------------
 
+(defun weiss-pdf-option()
+  (interactive)
+  ;; (sleep-for 5)
+  (pdf-annot-minor-mode)
+  ;; (org-noter)
+  )
+
+;; (add-hook 'pdfview-mode-hook 'pdf-annot-minor-mode)
+(add-hook 'pdf-view-mode-hook 'weiss-pdf-option)
 
 (defun weiss-indent()
   (interactive)
@@ -313,4 +400,3 @@
       :nv "rr" #'weiss-switch-and-Bookmarks-search)
 ;; ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑
 ;; ---------------------------------------------------------------------------
-(setq org-image-actual-width 300)

@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: weiss-tag
+# key: wtag
+# condition: t
+# --
+;; TAG $0
