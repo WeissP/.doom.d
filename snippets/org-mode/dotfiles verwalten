@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: dotfiles verwalten
+# key: <do
+# condition: t
+# --
+#+BEGIN_SRC conf :tangle ~/$1
+$0
+#+END_SRC

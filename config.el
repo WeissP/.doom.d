@@ -4,14 +4,11 @@
 (global-visual-line-mode t) ;truncate  lines
 (+global-word-wrap-mode t) ;truncate  lines
 
-(add-hook 'after-init-hook #'global-emojify-mode) ;; show emoji as picture
+;; (add-hook 'after-init-hook #'global-emojify-mode) ;; show emoji as picture
 
 (rainbow-mode +1)
 (global-aggressive-indent-mode 1)
 ;; (add-to-list 'aggressive-indent-excluded-modes 'html-mode)
-;; (setq org-bullets-bullet-list '("+" "-" "→" "▶" "●" "○" "·" ))
-
-;; ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑
 (defun weiss-global-option()
   (interactive)
   (rainbow-turn-on)
@@ -179,29 +176,17 @@
       :leader
       :n "eK" #'sp-kill-hybrid-sexp)
 
-(map! :desc "direct annot with yellow color"
-      :map pdf-view-mode-map
-      :leader
-      :nv "dh" #'pdf-annot-add-highlight-markup-annotation
-      )
 
-(map! :desc "direct annot and insert note with selected text"
-      :map pdf-view-mode-map
-      :leader
-      :nv "ds" #'weiss-direct-annot-and-insert-note
-      )
-
-(map! :desc "direct insert note with selected text"
-      :map pdf-view-mode-map
-      :leader
-      :nv "s" #'weiss-direct-insert-note
-      )
-
-(map! :desc "sync note location"
-      :map pdf-view-mode-map
-      :leader
-      :nv "dc" #'org-noter-sync-current-note
-      )
+(map!
+ :mode pdf-view-mode
+ :map pdf-view-mode-map
+ ;; :map org-mode-map
+ :localleader
+ :nv "s" 'weiss-direct-insert-note
+ :nv "dh" 'pdf-annot-add-highlight-markup-annotation
+ :nv "ds" 'weiss-direct-annot-and-insert-note
+ :nv "dc" 'org-noter-sync-current-note
+ )
 
 
 (defun weiss-direct-annot-and-insert-note()
@@ -216,6 +201,7 @@
     )
   )
 (defun weiss-direct-insert-note()
+  "direct annot and insert note with selected text"
   (interactive)
   (let ((pdfBuffer (buffer-name))
         (markedText (org-noter--get-precise-info))
@@ -304,7 +290,7 @@
                         (66 :foreground "#da8548")
                         (67 :foreground "#0098dd"))
 
-   org-directory "~/Dokumente/Org/"
+   org-directory "~/Documents/Org/"
    ;; org-agenda-files "~/Dokumente/Org/*.org"
    org-image-actual-width 300
    org-agenda-files (list org-directory)
@@ -313,7 +299,14 @@
    org-cycle-max-level 15
    org-fontify-done-headline t
    org-agenda-compact-blocks t
+   org-bullets-bullet-list '("◉" "◆" "●" "◇" "○" "→" "·" )
+;;; “♰” “☥” “✞” “✟” “✝” “†” “✠” “✚” “✜” “✛” “✢” “✣” “✤” “✥” “♱” "✙”  "◉"  "○" "✸" "✿" ♥ ● ◇ ✚ ✜ ☯ ◆ ♠ ♣ ♦ ☢ ❀ ◆ ◖ ▶
+
    )
+
+  (map! :desc "write code block in files"
+        :leader
+        :nv "rb" #'org-babel-tangle)
 
   (map! :map org-mode-map
         :n "M-j" #'org-metadown
@@ -333,20 +326,10 @@
         :leader
         :nv "rjt" #'org-table-create-or-convert-from-region)
 
-  (map! :desc "hide properties"
-        :leader
-        :n "rh" #'weiss-hide-drawers
-        )
-
-  (defun weiss-hide-drawers()
-    (interactive)
-    (org-cycle-hide-drawers 'all)
-    )
-
   (defun weiss-org-option ()
     (interactive)
     (iimage-mode)
-    (org-cycle-hide-drawers 'all)
+    (emojify-mode)
     (setq
      display-line-numbers 'nil))
 
@@ -392,7 +375,7 @@
       )
 (defun weiss-switch-and-Bookmarks-search()
   (interactive)
-  (find-file "~/Dokumente/Org/Einsammlung.org")
+  (find-file "~/Documents/Org/Einsammlung.org")
   (org-agenda nil "b")
   )
 (map! :desc "switch and Bookmarks search"
