@@ -383,3 +383,9 @@
       :nv "rr" #'weiss-switch-and-Bookmarks-search)
 ;; ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑
 ;; ---------------------------------------------------------------------------
+(setenv "PATH" (concat (getenv "PATH") ":/usr/share/ImageMagick-7/:/usr/lib/ImageMagick-7.0.8/"))
+(add-to-list 'exec-path "/usr/lib/ImageMagick-7.0.8/")
+(image-type-available-p 'imagemagick)
+(setq org-image-actual-width '(400))
+
+;; (getenv "PATH")

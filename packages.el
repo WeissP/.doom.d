@@ -16,3 +16,5 @@
 (package! emojify)
 (package! org-pdftools :disable t)
 (package! org-noter)
+(package! telega)
+(package! visual-fill-column)
