@@ -19,12 +19,7 @@
   :init
   :config
   (super-save-mode +1))
-
-;; (def-package! org-pdftools
-;;   :config
-;;   (setq org-pdftools-root-dir /home/weiss/Dokumente/Vorlesungen/)
-;;   )
-
+(require 'tramp)
 ;; ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ toggle up/lower-case
 (defun weiss-toggle-up-lower-case-of-single-character(charPoint)
   (interactive)
@@ -79,6 +74,7 @@
                             ("beginning" "end")
                             ("forward" "backward")
                             ("expand" "contract")
+                            ("enable" "disable")
                             ("even" "odd"))))
 
 (def-package! org-fancy-priorities
@@ -176,18 +172,17 @@
       :leader
       :n "eK" #'sp-kill-hybrid-sexp)
 
-
+;; (after! Org-Noter-Doc-mode
+;; (after! pdf-view-mode
 (map!
+ :after org-noter
  :mode pdf-view-mode
  :map pdf-view-mode-map
- ;; :map org-mode-map
- :localleader
- :nv "s" 'weiss-direct-insert-note
- :nv "dh" 'pdf-annot-add-highlight-markup-annotation
- :nv "ds" 'weiss-direct-annot-and-insert-note
- :nv "dc" 'org-noter-sync-current-note
+ :nv "SPC dd" 'weiss-direct-insert-note
+ :nv "SPC dh" 'pdf-annot-add-highlight-markup-annotation
+ :nv "SPC ds" 'weiss-direct-annot-and-insert-note
+ :nv "SPC dc" 'org-noter-sync-current-note
  )
-
 
 (defun weiss-direct-annot-and-insert-note()
   (interactive)
@@ -299,6 +294,7 @@
    org-cycle-max-level 15
    org-fontify-done-headline t
    org-agenda-compact-blocks t
+   org-image-actual-width '(600)
    org-bullets-bullet-list '("◉" "◆" "●" "◇" "○" "→" "·" )
 ;;; “♰” “☥” “✞” “✟” “✝” “†” “✠” “✚” “✜” “✛” “✢” “✣” “✤” “✥” “♱” "✙”  "◉"  "○" "✸" "✿" ♥ ● ◇ ✚ ✜ ☯ ◆ ♠ ♣ ♦ ☢ ❀ ◆ ◖ ▶
 
@@ -325,6 +321,14 @@
   (map! :desc "create-table"
         :leader
         :nv "rjt" #'org-table-create-or-convert-from-region)
+  (map!
+   :leader
+   :nv "dc" #'org-noter-sync-current-note
+   )
+
+  (map!
+   :leader
+   :nv "da" #'weiss-org-screenshot)
 
   (defun weiss-org-option ()
     (interactive)
@@ -383,9 +387,30 @@
       :nv "rr" #'weiss-switch-and-Bookmarks-search)
 ;; ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑
 ;; ---------------------------------------------------------------------------
-(setenv "PATH" (concat (getenv "PATH") ":/usr/share/ImageMagick-7/:/usr/lib/ImageMagick-7.0.8/"))
-(add-to-list 'exec-path "/usr/lib/ImageMagick-7.0.8/")
-(image-type-available-p 'imagemagick)
-(setq org-image-actual-width '(400))
 
 ;; (getenv "PATH")
+
+(defun weiss-org-screenshot ()
+  "Take a screenshot into a time stamped unique-named file in the
+same directory as the org-buffer and insert a link to this file."
+  (interactive)
+  ;; (setq filename
+  ;;       (concat
+  ;;        (make-temp-name
+  ;;         (concat (buffer-file-name)
+  ;;                 "_"
+  ;;                 (format-time-string "%Y%m%d_%H%M%S_")) ) ".png"))
+  (setq pathFileName
+        (concat "./Bilder/"
+                (concat
+                 (make-temp-name
+                  (concat (buffer-name)
+                          "_"
+                          (format-time-string "%Y%m%d_%H%M%S_")) ) ".png")
+                )
+        )
+  (call-process "import" nil nil nil pathFileName)
+  (insert (concat "[[" pathFileName "]]"))
+  (org-display-inline-images))
+
+;;https://stackoverflow.com/questions/17435995/paste-an-image-on-clipboard-to-emacs-org-mode-file-without-saving-ithttps://stackoverflow.com/questions/17435995/paste-an-image-on-clipboard-to-emacs-org-mode-file-without-saving-ithttps://stackoverflow.com/questions/17435995/paste-an-image-on-clipboard-to-emacs-org-mode-file-without-saving-it
