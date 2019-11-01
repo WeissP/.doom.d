@@ -182,6 +182,7 @@
  :nv "SPC dh" 'pdf-annot-add-highlight-markup-annotation
  :nv "SPC ds" 'weiss-direct-annot-and-insert-note
  :nv "SPC dc" 'org-noter-sync-current-note
+ :nv "SPC do" 'weiss-creat-org-pdf-link
  )
 
 (defun weiss-direct-annot-and-insert-note()
@@ -295,6 +296,9 @@
    org-fontify-done-headline t
    org-agenda-compact-blocks t
    org-image-actual-width '(600)
+   org-capture-templates   '(("o" "org-noter" entry (file "~/Documents/Org/Vorlesungen.org")
+                              "* %f \n :PROPERTIES: \n :NOTER_DOCUMENT: %F \n :END: \n [[%F][Filepath]]")
+                             )
    org-bullets-bullet-list '("◉" "◆" "●" "◇" "○" "→" "·" )
 ;;; “♰” “☥” “✞” “✟” “✝” “†” “✠” “✚” “✜” “✛” “✢” “✣” “✤” “✥” “♱” "✙”  "◉"  "○" "✸" "✿" ♥ ● ◇ ✚ ✜ ☯ ◆ ♠ ♣ ♦ ☢ ❀ ◆ ◖ ▶
 
@@ -414,3 +418,9 @@ same directory as the org-buffer and insert a link to this file."
   (org-display-inline-images))
 
 ;;https://stackoverflow.com/questions/17435995/paste-an-image-on-clipboard-to-emacs-org-mode-file-without-saving-ithttps://stackoverflow.com/questions/17435995/paste-an-image-on-clipboard-to-emacs-org-mode-file-without-saving-ithttps://stackoverflow.com/questions/17435995/paste-an-image-on-clipboard-to-emacs-org-mode-file-without-saving-it
+
+
+(setq org-capture-templates
+      '(("o" "org-noter" entry (file "~/Documents/Org/Vorlesungen.org")
+         "* %f \n :PROPERTIES: \n :NOTER_DOCUMENT: %F \n :END: \n [[%F][Filepath]]")
+        ))
