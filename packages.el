@@ -18,3 +18,6 @@
 (package! org-noter)
 (package! telega :disable t)
 (package! visual-fill-column :disable t)
+(package! cdlatex)
+(package! auctex)
+(package! german-holidays)

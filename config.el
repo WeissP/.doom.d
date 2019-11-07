@@ -3,7 +3,6 @@
 (global-auto-revert-mode t)
 (global-visual-line-mode t) ;truncate  lines
 (+global-word-wrap-mode t) ;truncate  lines
-
 ;; (add-hook 'after-init-hook #'global-emojify-mode) ;; show emoji as picture
 
 (rainbow-mode +1)
@@ -83,6 +82,10 @@
   :config
   (setq org-fancy-priorities-list '("⚡⚡" "⚡" "❄")))
 
+(def-package! german-holidays
+  :config
+  (setq calendar-holidays holiday-german-RP-holidays)
+  )
 
 (defun weiss-counsel-grep-or-swiper()
   (interactive)
@@ -111,69 +114,31 @@
                   ("TAG" . tag)
                   )
  )
-(map! :desc "go to end of line and eval"
-      :leader
-      :ne "a" #'weiss-eval-last-sexp())
+(map!
+ :leader
+ :ne "rd" #'weiss-custom-daily-agenda
+ :ne "a" #'weiss-eval-last-sexp()
+ :nv "<RET>" #'+default/project-tasks ;; tag search
+ :n "ri" #'weiss-indent ;;format whole buffer wenn nothing selected
+ :n "el" #'sp-forward-slurp-sexp ;; Fn18 include new var (right side)
+ :n "eh" #'sp-forward-barf-sexp ;; exclude new var (right side)
+ :n "eH" #'sp-backward-slurp-sexp ;; include new var(left side)
+ :n "eL" #'sp-backward-barf-sexp ;; exclude new var(left side)
+ :n "et" #'sp-transpose-sexp ;; trade places
+ :n "ek" #'sp-kill-sexp ;; delete expression
+ :n "eK" #'sp-kill-hybrid-sexp ;; delete backward all expression
+ )
 
-(map! :desc "tag search"
-      :leader
-      :nv "<RET>" #'+default/project-tasks)
+(map!
+ :n "gu" #'weiss-toggle-up-lower-case
+ :nei "S-<delete>" #'weiss-insert-backslash
+ :nei "M-n" #'sp-beginning-of-sexp ;; move point to the start of the string
+ :nei "M-m" #'sp-end-of-sexp ;Fn9
+ :n "C-s" #'weiss-counsel-grep-or-swiper ;; "swip search" original command: (isearch-forward &optional REGEXP-P NO-RECURSIVE-EDIT)
+ :nvi "M-[" #'er/expand-region ;; expand region
+ :nvi "M-]" #'er/contract-region
+ )
 
-(map! :desc "swip search"
-      :n "C-s" #'weiss-counsel-grep-or-swiper)
-;; original command: (isearch-forward &optional REGEXP-P NO-RECURSIVE-EDIT)
-
-(map! :desc "expand region"
-      :nvi "M-[" #'er/expand-region)
-(map! :desc "expand region"
-      :nvi "M-]" #'er/contract-region)
-
-(map! :desc "toggle-up-lower-case"
-      ;; :leader
-      :n "gu" #'weiss-toggle-up-lower-case)
-
-(map! :desc "format whole buffer wenn nothing selected"
-      :leader
-      :n "ri" #'weiss-indent)
-
-(map! :desc "move point to the start of the string"
-      :nei "M-n" #'sp-beginning-of-sexp)
-
-;; Fn9
-(map! :desc "move point to the end of the string"
-      :nei "M-m" #'sp-end-of-sexp)
-
-;; Fn18
-(map! :desc "include new var (right side)"
-      :leader
-      :n "el" #'sp-forward-slurp-sexp)
-
-(map! :desc "exclude new var (right side)"
-      :leader
-      :n "eh" #'sp-forward-barf-sexp)
-
-(map! :desc "include new var(left side)"
-      :leader
-      :n "eH" #'sp-backward-slurp-sexp)
-
-(map! :desc "exclude new var(left side)"
-      :leader
-      :n "eL" #'sp-backward-barf-sexp)
-
-(map! :desc "trade places"
-      :leader
-      :n "et" #'sp-transpose-sexp)
-
-(map! :desc "delete expression"
-      :leader
-      :n "ek" #'sp-kill-sexp)
-
-(map! :desc "delete backward all expression"
-      :leader
-      :n "eK" #'sp-kill-hybrid-sexp)
-
-;; (after! Org-Noter-Doc-mode
-;; (after! pdf-view-mode
 (map!
  :after org-noter
  :mode pdf-view-mode
@@ -275,17 +240,33 @@
                       :foreground "#040404"
                       :weight 'normal)
   ;; (setq line-spacing 1.5)
-
+  (sp-pair "$" "$")
   ;; TAG org-settings
   (setq
    ;; yas-indent-line 'nil
    ;; yas-also-auto-indent-first-line 'nil
    org-agenda-skip-scheduled-if-done t
    org-log-done 'time
+   org-agenda-include-diary t
+   cdlatex-math-symbol-alist '(
+                               ( ?v  ("\\vee"   "\\vDash"         ))
+                               ( ?+  ("\\cup"   "\\equiv"         ))
+                               )
    org-priority-faces '((65 :foreground "#de3d2f" :weight bold)
                         (66 :foreground "#da8548")
                         (67 :foreground "#0098dd"))
 
+   org-agenda-custom-commands
+   '(
+     ("c" "Custom agenda"
+      ((agenda ""))
+      (
+       (org-agenda-tag-filter-preset '("+dailyagenda"))
+       (org-agenda-hide-tags-regexp (concat org-agenda-hide-tags-regexp "\\|dailyagenda"))
+       (org-agenda-span 20)
+       ))
+     ("b" occur-tree "Bookmarks")
+     )
    org-directory "~/Documents/Org/"
    ;; org-agenda-files "~/Dokumente/Org/*.org"
    org-image-actual-width 300
@@ -304,42 +285,37 @@
 
    )
 
-  (map! :desc "write code block in files"
-        :leader
-        :nv "rb" #'org-babel-tangle)
-
-  (map! :map org-mode-map
-        :n "M-j" #'org-metadown
-        :n "M-k" #'org-metaup)
-
-  (map! :desc "org sort"
-        :leader
-        :n "rs" #'org-sort-entries)
-
-  (map! :desc "Create Sparse Tree for Tags"
-        :leader
-        :n "rt" #'org-tags-sparse-tree)
-  (map! :desc "pinyin-search"
-        :leader
-        :n "rp" #'pinyin-search)
-  (map! :desc "create-table"
-        :leader
-        :nv "rjt" #'org-table-create-or-convert-from-region)
   (map!
    :leader
+   :nv "ro" #'org-noter
+   :nv "rb" #'org-babel-tangle ;; write code block in files
+   :n "M-j" #'org-metadown
+   :n "M-k" #'org-metaup
+   :n "rs" #'org-sort-entries
+   :n "rt" #'org-tags-sparse-tree
+   :n "rp" #'pinyin-search
+   :nv "rjt" #'org-table-create-or-convert-from-region
    :nv "dc" #'org-noter-sync-current-note
+   :nv "da" #'weiss-org-screenshot
+   :nv "tt" #'weiss-org-latex-preview-all
    )
 
-  (map!
-   :leader
-   :nv "da" #'weiss-org-screenshot)
+  (defun weiss-org-latex-preview-all()
+    (interactive)
+    (setq current-prefix-arg '(16))
+    (call-interactively 'org-latex-preview)
+    )
 
   (defun weiss-org-option ()
     (interactive)
     (iimage-mode)
     (emojify-mode)
     (setq
-     display-line-numbers 'nil))
+     display-line-numbers 'nil)
+    ;; (let ((current-prefix-arg '(16)))
+    ;;   (call-interactively 'org-latex-preview)
+    ;;   )
+    )
 
 
   (add-hook 'org-mode-hook 'weiss-org-option)
@@ -376,11 +352,6 @@
 (setq display-line-numbers-type 'relative)
 
 ;; ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ switch and Bookmarks suchen
-(setq org-agenda-custom-commands
-      '(
-        ("b" occur-tree "Bookmarks")
-        )
-      )
 (defun weiss-switch-and-Bookmarks-search()
   (interactive)
   (find-file "~/Documents/Org/Einsammlung.org")
@@ -391,6 +362,12 @@
       :nv "rr" #'weiss-switch-and-Bookmarks-search)
 ;; ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑
 ;; ---------------------------------------------------------------------------
+
+(defun weiss-custom-daily-agenda()
+  (interactive)
+  (org-agenda nil "c")
+  )
+
 
 ;; (getenv "PATH")
 
@@ -424,3 +401,8 @@ same directory as the org-buffer and insert a link to this file."
       '(("o" "org-noter" entry (file "~/Documents/Org/Vorlesungen.org")
          "* %f \n :PROPERTIES: \n :NOTER_DOCUMENT: %F \n :END: \n [[%F][Filepath]]")
         ))
+
+(defun weiss-insert-backslash()
+  (interactive)
+  (insert "\\")
+  )
