@@ -21,3 +21,4 @@
 (package! cdlatex)
 (package! auctex)
 (package! german-holidays)
+(package! org-mind-map :disable t)

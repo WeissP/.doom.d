@@ -32,6 +32,8 @@
     )
   )
 
+
+
 (defun weiss-toggle-up-lower-case()
   (interactive)
   (if (use-region-p)
@@ -158,6 +160,8 @@
         )
     (pdf-annot-add-markup-annotation list 'highlight)
     (org-noter-insert-precise-note)
+    (org-up-element)
+    (org-set-tags ":Frage:")
     (evil-exit-visual-state nil pdfBuffer) ;; conflict between evil and pdf text selection
     )
   )
@@ -247,15 +251,21 @@
    ;; yas-also-auto-indent-first-line 'nil
    org-agenda-skip-scheduled-if-done t
    org-log-done 'time
+   org-fast-tag-selection-single-key t
    org-agenda-include-diary t
    cdlatex-math-symbol-alist '(
                                ( ?v  ("\\vee"   "\\vDash"         ))
                                ( ?+  ("\\cup"   "\\equiv"         ))
+                               ( ?{  ("\\subset" "\\subseteq"        ))
+                               ( ?}  ("\\supset"  "\\supseteq"       ))
                                )
    org-priority-faces '((65 :foreground "#de3d2f" :weight bold)
                         (66 :foreground "#da8548")
                         (67 :foreground "#0098dd"))
 
+   ;; org-tag-faces '(
+   ;;                 ("Frage" . (:foreground "red"))
+   ;;                 )
    org-agenda-custom-commands
    '(
      ("c" "Custom agenda"
@@ -406,3 +416,6 @@ same directory as the org-buffer and insert a link to this file."
   (interactive)
   (insert "\\")
   )
+
+(font-lock-add-keywords 'org-mode
+                        '(("^.*:Frage:.*$" . font-lock-keyword-face)))
