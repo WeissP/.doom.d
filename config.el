@@ -6,7 +6,7 @@
 ;; (add-hook 'after-init-hook #'global-emojify-mode) ;; show emoji as picture
 
 (rainbow-mode +1)
-(global-aggressive-indent-mode 1)
+;; (global-aggressive-indent-mode 1)
 ;; (add-to-list 'aggressive-indent-excluded-modes 'html-mode)
 (defun weiss-global-option()
   (interactive)
@@ -111,6 +111,7 @@
  org-noter-auto-save-last-location 't
  auto-save-default 'nil
  company-idle-delay 0.1
+ large-file-warning-threshold 100000000
  +ivy-task-tags '(("TODO" . warning)
                   ("FIXME" . error)
                   ("TAG" . tag)
@@ -192,8 +193,8 @@
                       :weight 'normal
                       :underline 'nil
                       :slant 'italic
-                      :height 0.8
-                      :foreground "#c0c0c0"
+                      :height 0.9
+                      :foreground "#606060"
                       :background nil)
   (set-face-attribute 'org-link nil
                       :weight 'normal
@@ -419,3 +420,9 @@ same directory as the org-buffer and insert a link to this file."
 
 (font-lock-add-keywords 'org-mode
                         '(("^.*:Frage:.*$" . font-lock-keyword-face)))
+
+;;Exit insert mode by pressing j and then j quickly
+(setq key-chord-two-keys-delay 0.3)
+(key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
+(key-chord-mode 1)
+(image-type-available-p 'imagemagick)

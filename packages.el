@@ -22,3 +22,5 @@
 (package! auctex)
 (package! german-holidays)
 (package! org-mind-map :disable t)
+(package! fsharp-mode)
+(package! key-chord)
