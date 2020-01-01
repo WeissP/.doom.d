@@ -24,3 +24,6 @@
 (package! org-mind-map :disable t)
 (package! fsharp-mode)
 (package! key-chord)
+(package! delete-block)
+(package! vterm)
+(package! powerline :disable t)

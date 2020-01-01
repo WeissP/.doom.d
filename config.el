@@ -5,7 +5,10 @@
 (+global-word-wrap-mode t) ;truncate  lines
 ;; (add-hook 'after-init-hook #'global-emojify-mode) ;; show emoji as picture
 
+(setq fancy-splash-image "/home/weiss/Documents/Org/Bilder/ue-light.png")
 (rainbow-mode +1)
+;; (powerline-default-theme)
+(global-subword-mode 1)
 ;; (global-aggressive-indent-mode 1)
 ;; (add-to-list 'aggressive-indent-excluded-modes 'html-mode)
 (defun weiss-global-option()
@@ -18,6 +21,16 @@
   :init
   :config
   (super-save-mode +1))
+
+(def-package! vterm
+  :config
+  (setq vterm-shell "zsh")
+  (add-hook 'vterm-set-title-functions 'vterm--rename-buffer-as-title))
+
+(defun vterm--rename-buffer-as-title (title)
+  (rename-buffer (format "vterm @ %s" title) t))
+
+
 (require 'tramp)
 ;; ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ toggle up/lower-case
 (defun weiss-toggle-up-lower-case-of-single-character(charPoint)
@@ -31,8 +44,6 @@
     ;; (goto-char charPoint)
     )
   )
-
-
 
 (defun weiss-toggle-up-lower-case()
   (interactive)
@@ -130,6 +141,7 @@
  :n "et" #'sp-transpose-sexp ;; trade places
  :n "ek" #'sp-kill-sexp ;; delete expression
  :n "eK" #'sp-kill-hybrid-sexp ;; delete backward all expression
+ :n "ov" #'vterm-other-window
  )
 
 (map!
