@@ -1,14 +1,23 @@
 (server-mode)
 (load-theme 'doom-one-light t)
+(add-to-list 'load-path "/home/weiss/elisp/shiftless.el")
 (global-auto-revert-mode t)
 (global-visual-line-mode t) ;truncate  lines
 (+global-word-wrap-mode t) ;truncate  lines
 ;; (add-hook 'after-init-hook #'global-emojify-mode) ;; show emoji as picture
 
+(load "shiftless")
 (setq fancy-splash-image "/home/weiss/Documents/Org/Bilder/ue-light.png")
 (rainbow-mode +1)
+;; (require 'shiftless)
+(shiftless-programming)
+(setq shiftless-delay 0.45) ;; larger than 0.18
+(setq shiftless-interval 0.06) ;; larger than 0.045
+(shiftless-mode 1)
+
 ;; (powerline-default-theme)
 (global-subword-mode 1)
+
 ;; (global-aggressive-indent-mode 1)
 ;; (add-to-list 'aggressive-indent-excluded-modes 'html-mode)
 (defun weiss-global-option()
@@ -16,12 +25,10 @@
   (rainbow-turn-on)
   )
 (add-hook 'find-file-hook 'weiss-global-option)
-
 (def-package! super-save
   :init
   :config
   (super-save-mode +1))
-
 (def-package! vterm
   :config
   (setq vterm-shell "zsh")
@@ -29,7 +36,6 @@
 
 (defun vterm--rename-buffer-as-title (title)
   (rename-buffer (format "vterm @ %s" title) t))
-
 
 (require 'tramp)
 ;; ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ toggle up/lower-case
@@ -333,6 +339,8 @@
     (interactive)
     (iimage-mode)
     (emojify-mode)
+    (make-local-variable 'shiftless-upper-rules)
+    (shiftless-Umlaut)
     (setq
      display-line-numbers 'nil)
     ;; (let ((current-prefix-arg '(16)))
@@ -434,7 +442,8 @@ same directory as the org-buffer and insert a link to this file."
                         '(("^.*:Frage:.*$" . font-lock-keyword-face)))
 
 ;;Exit insert mode by pressing j and then j quickly
-(setq key-chord-two-keys-delay 0.3)
-(key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
-(key-chord-mode 1)
+;; (setq key-chord-two-keys-delay 0.3)
+;; (key-chord-define evil-insert-state-map "jk" 'evil-normal-state)
+;; (key-chord-mode 1)
+
 (image-type-available-p 'imagemagick)

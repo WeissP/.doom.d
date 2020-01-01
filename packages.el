@@ -23,7 +23,12 @@
 (package! german-holidays)
 (package! org-mind-map :disable t)
 (package! fsharp-mode)
-(package! key-chord)
-(package! delete-block)
+(package! key-chord :disable t)
+(package! delete-block :disable t)
 (package! vterm)
 (package! powerline :disable t)
+(package! shiftless.el :recipe
+  (:host github
+   :repo "WeissP/shiftless.el"
+   :branch "master"
+):disable t)
