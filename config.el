@@ -1,15 +1,15 @@
 (server-mode)
 (load-theme 'doom-one-light t)
-(add-to-list 'load-path "/home/weiss/elisp/shiftless.el")
+;; (add-to-list 'load-path "/home/weiss/elisp/shiftless.el")
 (global-auto-revert-mode t)
 (global-visual-line-mode t) ;truncate  lines
 (+global-word-wrap-mode t) ;truncate  lines
 ;; (add-hook 'after-init-hook #'global-emojify-mode) ;; show emoji as picture
 
-(load "shiftless")
+;; (load "shiftless")
 (setq fancy-splash-image "/home/weiss/Documents/Org/Bilder/ue-light.png")
 (rainbow-mode +1)
-;; (require 'shiftless)
+(require 'shiftless)
 (shiftless-programming)
 (setq shiftless-delay 0.45) ;; larger than 0.18
 (setq shiftless-interval 0.06) ;; larger than 0.045
