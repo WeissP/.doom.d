@@ -1,11 +1,11 @@
 (server-mode)
 (load-theme 'doom-one-light t)
-;; (add-to-list 'load-path "/home/weiss/elisp/shiftless.el")
 (global-auto-revert-mode t)
 (global-visual-line-mode t) ;truncate  lines
 (+global-word-wrap-mode t) ;truncate  lines
 ;; (add-hook 'after-init-hook #'global-emojify-mode) ;; show emoji as picture
 
+;; (add-to-list 'load-path "/home/weiss/elisp/shiftless.el")
 ;; (load "shiftless")
 (setq fancy-splash-image "/home/weiss/Documents/Org/Bilder/ue-light.png")
 (rainbow-mode +1)
@@ -13,6 +13,7 @@
 (shiftless-programming)
 (setq shiftless-delay 0.45) ;; larger than 0.18
 (setq shiftless-interval 0.06) ;; larger than 0.045
+(advice-add 'sp--post-self-insert-hook-handler :around #'shiftless--prevent-advice)
 (shiftless-mode 1)
 
 ;; (powerline-default-theme)
@@ -159,7 +160,6 @@
  :nvi "M-[" #'er/expand-region ;; expand region
  :nvi "M-]" #'er/contract-region
  )
-
 (map!
  :after org-noter
  :mode pdf-view-mode
@@ -447,3 +447,10 @@ same directory as the org-buffer and insert a link to this file."
 ;; (key-chord-mode 1)
 
 (image-type-available-p 'imagemagick)
+
+;; (setf (lsp-session-folders-blacklist (lsp-session)) nil)
+;; (lsp--persist-session (lsp-session))
+
+
+;; (setq shiftless-upper-rules
+;;       '((?9 . paredit-open-round)))

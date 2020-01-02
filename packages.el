@@ -31,4 +31,6 @@
   (:host github
    :repo "WeissP/shiftless.el"
    :branch "master"
-):disable t)
+))
+(package! jsonrpc :disable t)
+(package! jieba :recipe (:host github :repo "cireu/jieba.el") :disable t)
