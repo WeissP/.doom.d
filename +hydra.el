@@ -2,7 +2,7 @@
 
 
 (defhydra resize-window (global-map "M-w")
-  "zoom"
+  "resize window"
   ("k" evil-window-increase-height "height+")
   ("j" evil-window-decrease-height "height-")
   ("h" evil-window-decrease-width "width-")
