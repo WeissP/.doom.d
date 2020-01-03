@@ -2,8 +2,8 @@
 (global-auto-revert-mode t)
 ;; (add-hook 'after-init-hook #'global-emojify-mode) ;; show emoji as picture
 
-;; (add-to-list 'load-path "/home/weiss/elisp/shiftless.el")
-;; (load "shiftless")
+;; (add-to-list 'load-path "/home/weiss/elisp/rainbow-mode/")
+;; (load "rainbow-mode")
 
 (load! "+edit")
 (load! "+vterm")
@@ -67,7 +67,66 @@
   (interactive)
   (end-of-line)
   (eval-last-sexp()))
-;; ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑
-;; ---------------------------------------------------------------------------
+;; ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑
+;; ----------------------------------------------------------
 
+
+(use-package! company-tabnine
+  :when (featurep! :completion company)
+  :config
+  ;; (add-to-list 'company-backends #'company-tabnine)
+  ;; (set-company-backend! 'text-mode
+  ;;   'company-tabnine 'company-dabbrev 'company-yasnippet 'company-ispell)
+  ;; (set-company-backend! 'conf-mode
+  ;;   'company-tabnine 'company-capf 'company-dabbrev-code 'company-yasnippet)
+  (set-company-backend! 'prog-mode
+    'company-tabnine 'company-capf 'company-yasnippet)
+  (setq +lsp-company-backend '(company-lsp :with company-tabnine :separate))
+  ;; (setq +lsp-company-backend '(company-tabnine :with company-lsp :separate))
+  ;;慢一点，不要太快出来提示框，会影响思路的
+  (setq company-idle-delay 0.3))
+
+
+;; Recent files
+;; recentf-cleanup will update recentf-list
+(use-package recentf
+  :preface
+  (defun snug/recentf-save-list-silence ()
+    (interactive)
+    (let ((message-log-max nil))
+      (if (fboundp 'shut-up)
+          (shut-up (recentf-save-list))
+        (recentf-save-list)))
+    (message ""))
+  (defun snug/recentf-cleanup-silence ()
+    (interactive)
+    (let ((message-log-max nil))
+      (if (fboundp 'shut-up)
+          (shut-up (recentf-cleanup))
+        (recentf-cleanup)))
+    (message ""))
+  :config
+  (run-at-time nil (* 5 60) 'snug/recentf-save-list-silence)
+
+  (setq
+   ;; recentf-max-menu-items 150
+   ;; recentf-max-saved-items 150
+   recentf-auto-cleanup '60
+   ;; Recentf blacklist
+   recentf-exclude '(
+                     ".*autosave$"
+                     ".*archive$"
+                     ".*.jpg$"
+                     ".*.png$"
+                     ".*.gif$"
+                     ".cache"
+                     "cache"
+                     ))
+  )
+
+(def-package! deft
+  :config
+  (setq deft-directory "/home/weiss/Documents/Org/")
+  (setq deft-use-filename-as-title t)
+  )
 

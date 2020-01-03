@@ -127,6 +127,12 @@
 
    )
 
+  (defun weiss-org-archive()
+    (interactive)
+    (setq current-prefix-arg '(4))
+    (call-interactively 'org-archive-subtree)
+    )
+
   (defun weiss-org-latex-preview-all()
     (interactive)
     (setq current-prefix-arg '(16))

@@ -13,7 +13,7 @@
 
  display-line-numbers-type 'relative
  fancy-splash-image "/home/weiss/Documents/Org/Bilder/ue-light.png"
-)
+ )
 
 
 
@@ -40,7 +40,7 @@
   (set-face-background 'highlight-indent-guides-odd-face "#f5f5f5")
   (set-face-background 'highlight-indent-guides-even-face "#FAFAFA")
   ;; (setq highlight-indent-guides-auto-even-face-perc 15)
-)
+  )
 
 ;; ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑ ↑
 ;; --------------------------------------------------

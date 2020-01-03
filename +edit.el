@@ -52,6 +52,7 @@
                             ("forward" "backward")
                             ("expand" "contract")
                             ("enable" "disable")
+                            ("increase" "decrease")
                             ("even" "odd"))))
 
 

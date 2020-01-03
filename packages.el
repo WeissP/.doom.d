@@ -34,3 +34,4 @@
 ))
 (package! jsonrpc :disable t)
 (package! jieba :recipe (:host github :repo "cireu/jieba.el") :disable t)
+(package! company-tabnine)

@@ -47,6 +47,7 @@
    :n "M-k" #'org-metaup
    :n "rs" #'org-sort-entries
    :n "rt" #'org-tags-sparse-tree
+   :n "ra" #'weiss-org-archive()
    :n "rp" #'pinyin-search
    :nv "rjt" #'org-table-create-or-convert-from-region
    :nv "dc" #'org-noter-sync-current-note
