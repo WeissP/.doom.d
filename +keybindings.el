@@ -1,9 +1,19 @@
 ;;; ~/.doom.d/+keybindings.el -*- lexical-binding: t; -*-
 
+;;Key Configuration for Doom as Vanilla Emacs
+;; (setq evil-default-state 'emacs)
+
+;; (def-package! xah-fly-keys
+;;   :config
+;;   (xah-fly-keys-set-layout "qwerty")
+;;   (xah-fly-keys 1)
+;;   )
+
 (map!
  :leader
  :ne "rd" #'weiss-custom-daily-agenda
- :ne "a" #'weiss-eval-last-sexp()
+ :ne "a"
+ #'weiss-eval-last-sexp()
  :nv "<RET>" #'+default/project-tasks ;; tag search
  :n "ri" #'weiss-indent ;;format whole buffer wenn nothing selected
  :n "el" #'sp-forward-slurp-sexp ;; Fn18 include new var (right side)
@@ -54,3 +64,5 @@
    :nv "da" #'weiss-org-screenshot
    :nv "tt" #'weiss-org-latex-preview-all
    ))
+
+

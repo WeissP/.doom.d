@@ -1,6 +1,3 @@
-;; -*- no-byte-compile: t; -*-
-;;; .doom.d/packages.el
-
 ;;; Examples:
 ;; (package! some-package)
 ;; (package! another-package :recipe (:host github :repo "username/repo"))
@@ -35,3 +32,5 @@
 (package! jsonrpc :disable t)
 (package! jieba :recipe (:host github :repo "cireu/jieba.el") :disable t)
 (package! company-tabnine)
+(package! keyfreq :recipe (:host github :repo "dacap/keyfreq"))
+;; (package! xah-fly-keys)

@@ -130,3 +130,8 @@
   (setq deft-use-filename-as-title t)
   )
 
+(def-package! keyfreq
+  :config
+  (keyfreq-mode 1)
+  (keyfreq-autosave-mode 1)
+  )

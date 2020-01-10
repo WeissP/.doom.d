@@ -16,7 +16,8 @@
        company           ; the ultimate code completion backend
        ;; helm              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
-       ivy               ; a search engine for love and life
+       (ivy
+        +icons)               ; a search engine for love and life
 
        :ui
        deft              ; notational velocity for Emacs
@@ -40,8 +41,10 @@
        ;;unicode           ; extended unicode support for various languages
        vc-gutter         ; vcs diff in the fringe
        vi-tilde-fringe   ; fringe tildes to mark beyond EOB
-       window-select     ; visually switch windows
+       (window-select
+        +numbers)     ; visually switch windows
        workspaces        ; tab emulation, persistence & separate workspaces
+       ;; zen
 
        :editor
        (evil +everywhere); come to the dark side, we have cookies
@@ -57,7 +60,8 @@
        word-wrap         ; soft wrapping with language-aware indent
 
        :emacs
-       dired             ; making dired pretty [functional]
+       (dired
+        +icons)             ; making dired pretty [functional]
        electric          ; smarter, keyword-based electric-indent
        vc                ; version-control and Emacs, sitting in a tree
 

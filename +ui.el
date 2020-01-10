@@ -9,7 +9,7 @@
 (setq
  doom-font (font-spec :family "SF Mono" :size 15)
  doom-big-font (font-spec :family "SF Mono" :size 20)
- doom-variable-pitch-font (font-spec :family "Avenir Next" :size 17)
+ doom-variable-pitch-font (font-spec :family "SF Mono" :size 17)
 
  display-line-numbers-type 'relative
  fancy-splash-image "/home/weiss/Documents/Org/Bilder/ue-light.png"
